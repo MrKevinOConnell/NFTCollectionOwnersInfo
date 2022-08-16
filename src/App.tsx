@@ -10,7 +10,6 @@ import {
 } from "alchemy-sdk";
 import { fetchAndRetryIfNecessary } from './utils/utils';
 import TokenInfo from './TokenInfo/TokenInfo';
-import { isError } from 'lodash';
 
 function App() {
   
