@@ -30,11 +30,8 @@ const settings = {
 const alchemy = new Alchemy(settings);
 const getTokenNumber = (contract: string, array: any[], size: number) => {
   const finArray = array.filter(v => { 
-  return v.address === contract}).map(v => v.balance)
-  
-  
+  return v && v.address === contract}).map(v => v.balance)
 return  {address: contract,['balance']: finArray.reduce((a,b)=> a + b)/size}
-
 }
 function sortNFTs(array: any[]) {
   let frequency = {} as any, value 
@@ -67,6 +64,7 @@ function sortNFTs(array: any[]) {
 
 const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
   try {
+  
     const tokens = await Promise.all(owners.map(async (owner: string) => {
       try {
         const raw = JSON.stringify({
@@ -103,6 +101,7 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
         console.log(e)
       }
     }).flat())
+    
     const ownerTokens = [].concat.apply([], tokens) as any[]
     const finishOwnerAddresses = Array.from(new Set(ownerTokens.filter(t => t).map(token =>  token.address).filter(e => e)))
     const finishOwnerTokens = finishOwnerAddresses.map(address => {
@@ -164,8 +163,7 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
     }))
     tokenMetadata.sort((a,b) => b.balance - a.balance)
     const finishedTokens = tokenMetadata.slice(0,10)
-  
-    setTokenInfo(finishedTokens)
+    return finishedTokens
     }
     catch(e){
       console.log(e)
@@ -191,7 +189,7 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
       setIsLoading(false)
       return
     }
-    await getTokenInfo(owners)
+   const tokens = await getTokenInfo(owners)
     setOwners(owners)
     const nfts = await Promise.all(owners.map(async (owner: string) => {
       try {
@@ -210,7 +208,7 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
       }
       }
       catch(e){
-        console.log(e)
+       console.log(e)
       }
     }))
     
@@ -240,6 +238,7 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
     }))
    
     setNFTs(finalNfts.filter(e => e).slice(0,10))
+    setTokenInfo(tokens)
     setIsLoading(false)
   }
   }
