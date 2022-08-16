@@ -273,7 +273,7 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
       </Stack>
       {contractMD && !error && <Typography textAlign="center">{contractMD.name} {contractMD.symbol} </Typography> }
       {isLoading && <Stack direction="row" justifyContent="center"> <CircularProgress /> </Stack>}
-      {!isLoading && owners && <Tabs centered value={value} onChange={handleChange} aria-label="basic tabs example">
+      {!isLoading && owners && !error && <Tabs centered value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Owners NFT info" {...a11yProps(0)} />
           <Tab label="Owners Token info" {...a11yProps(1)} />
         </Tabs>}
