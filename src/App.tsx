@@ -29,7 +29,6 @@ const settings = {
 
 const alchemy = new Alchemy(settings);
 const getTokenNumber = (contract: string, array: any[], size: number) => {
-  console.log("CONTRACT IS", contract)
   const finArray = array.filter(v => { 
   return v.address === contract}).map(v => v.balance)
   
@@ -116,7 +115,6 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
     ))
     if(USDtokenConversionRes.ok) {
       const json = await USDtokenConversionRes.json()
-      console.log("json",json)
       USDETHValue = json.USD
     }
     const tokenMetadata = await Promise.all(finishOwnerTokens.map(async (token: any) => {
@@ -142,7 +140,6 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
       ))
       if(tokenRes.ok) {
       const md = await tokenRes.json().then(async (res: any) => {
-        console.log("Res",res)
         const usertoken = res.result
        const conversion = `https://min-api.cryptocompare.com/data/price?fsym=${usertoken.symbol}&tsyms=ETH&api_key=${process.env.REACT_APP_CRYPTO_COMPARE}`
        const tokenConversionRes = await fetchAndRetryIfNecessary (async () => (
@@ -152,7 +149,6 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
         const json = await tokenConversionRes.json()
         const ETHBalance = token.balance * json.ETH
         const balance = USDETHValue ? USDETHValue * ETHBalance : ETHBalance
-        console.log("json",balance)
         return {...token,balance,name: usertoken.name, symbol: usertoken.symbol}
       }
       })
@@ -231,7 +227,7 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
       ))
 
       const imagejson = await imageResponse.json()
-      const imageurl = imagejson.collection.large_image_url ? imagejson.collection.large_image_url : imagejson.collection.image_url ? imagejson.collection.image_url : null
+      const imageurl = imagejson.collection ? (imagejson.collection.large_image_url ? imagejson.collection.large_image_url : imagejson.collection.image_url ? imagejson.collection.image_url : null) : null
       
       const imageSrc = imageurl ? await fetchAndRetryIfNecessary (async () => (
         await fetch(imageurl)
