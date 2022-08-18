@@ -198,7 +198,7 @@ const getTokenInfo: (owners: string[]) => void = async (owners : string[]) => {
       ))
       if(response.ok) {
       const user = await response.json().then((res: any) => {
-        const userNFTs = res.ownedNfts.map((nft: any) => nft.contract.address)
+        const userNFTs = res.ownedNfts.map((nft: any) => nft.contract.address).filter((nft: string) => nft.toLowerCase() !== address.toLowerCase())
         return [...userNFTs]
       })
      return user
