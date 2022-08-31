@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+web app that grabs details about a NFT contract
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+hosted at https://findnftcollectionownerinfo.herokuapp.com/
 
 ## Available Scripts
 
